@@ -1,42 +1,3 @@
-// "use client"
-// import { useState } from "react";
-// import { useAuth } from "@/context/AuthProvider";
-// import { useRouter } from "next/navigation";
-
-// const Login = () => {
-//   const { login } = useAuth();
-//   const router = useRouter();
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await login(email, password);
-//       router.push("/home");
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Login</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-//         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-//         <button type="submit">Login</button>
-//       </form>
-//       {error && <p style={{ color: "red" }}>{error}</p>}
-//       <button onClick={() => router.push("/register")}>Don't have an account? Register</button>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
-
 'use client'
 import { useState } from "react";
 import { useAuth } from "@/context/AuthProvider";
@@ -47,15 +8,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 export default function Login() {
-    const { login } = useAuth();
+    const { login, handlePasswordReset } = useAuth();
     const [showPassword, setShowPassword] = useState(false)
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
 
     const handleSubmit = async (e) => {
@@ -65,6 +28,16 @@ export default function Login() {
             router.push("/home");
         } catch (err) {
             setError(err.message);
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        try {
+            await handlePasswordReset(email);
+            setShowForgotPasswordModal(false);
+        } catch (error) {
+            console.error("Error sending password reset email:", error);
+            setError("Error sending password reset email. Please try again.");
         }
     };
 
@@ -120,12 +93,24 @@ export default function Login() {
                                     Sign up
                                 </Link>
                             </p>
-                            <Link href="/forgot-password" className="text-blue-600 hover:underline block">
-                                Forgot your password?
-                            </Link>
+                            <button
+                                type="button"
+                                onClick={() => setShowForgotPasswordModal(true)}
+                                className="text-[#3C50E0] hover:text-blue-700"
+                            >
+                                Forgot Password?
+                            </button>
                         </div>
                     </CardFooter>
                 </form>
+                {showForgotPasswordModal && (
+                    <ForgotPasswordModal
+                        email={email}
+                        setEmail={setEmail}
+                        onClose={() => setShowForgotPasswordModal(false)}
+                        onSend={handleForgotPassword}
+                    />
+                )}
             </Card>
         </div>
     )

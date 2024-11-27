@@ -2,6 +2,24 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, Menu, Search, ChevronRight } from 'lucide-react'
 
+const items = [
+  {
+    name: "Simple Hoodie",
+    image: "/home.jpg",
+    price: 23,
+  },
+  {
+    name: "Comfort Hoodie",
+    image: "/home.jpg",
+    price: 56,
+  },
+  {
+    name: "Zara Hoodie",
+    image: "/home.jpg",
+    price: 67,
+  },
+]
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
@@ -32,24 +50,24 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Collection</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3].map((item) => (
+              {items.map((item) => (
                 <div key={item} className="group">
                   <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
                     <Image
-                      src="/placeholder.svg"
-                      alt={`Hoodie ${item}`}
+                      src={item.image}
+                      alt={item.name}
                       width={500}
                       height={500}
-                      className="h-full w-full object-cover object-center group-hover:opacity-75"
+                      className="h-full w-full object-cover object-center group-hover:opacity-80"
                     />
                   </div>
-                  <h3 className="mt-4 text-sm text-gray-700">Comfort Hoodie</h3>
-                  <p className="mt-1 text-lg font-medium text-gray-900">$49.99</p>
+                  <h3 className="mt-4 text-sm text-gray-700">{item.name}</h3>
+                  <p className="mt-1 text-lg font-medium text-gray-900">${item.price}</p>
                 </div>
               ))}
             </div>
             <div className="mt-12 text-center">
-              <Link href="#" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100">
+              <Link href="/collections" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-indigo-50 hover:bg-indigo-100">
                 View All Collections
               </Link>
             </div>

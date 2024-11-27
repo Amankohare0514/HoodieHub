@@ -8,7 +8,6 @@ const page = () => {
     <AuthProvider>
       <Home />
     </AuthProvider>
-
   )
 }
 
